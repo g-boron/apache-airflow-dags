@@ -1,3 +1,10 @@
+"""
+### Dask Benchmark DAG
+
+__Version 1.0.0__
+
+The purpose of the DAG is performance benchmark in data transformation.
+"""
 import os
 from datetime import datetime, timedelta
 
@@ -21,7 +28,8 @@ KWARGS = {
 with DAG(
   dag_id=os.path.basename(__file__),
   start_date=datetime.now() - timedelta(days=1),
-  schedule=None
+  schedule=None,
+  doc_md=__doc__
 ) as dag:
   Clean_data_directory = PythonOperator(
     task_id="clean_data_directory",
