@@ -107,7 +107,7 @@ def create_daily_report(lf: pl.LazyFrame, location_map: pl.LazyFrame) -> pl.Data
         pl.col("dropoff_location").fill_null("Unknown")
     ])
     daily_report = daily_report.with_columns([
-        pl.col("pickup_date").cast(pl.Datetime)
+        pl.col("pickup_date").cast(pl.Date)
     ])
     daily_report = daily_report.select([
         "pickup_date", "pickup_day", "pickup_location", "dropoff_location",
