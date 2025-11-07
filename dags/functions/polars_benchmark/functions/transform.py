@@ -104,7 +104,7 @@ def create_daily_report(df: pl.DataFrame, location_map: pl.DataFrame) -> pl.Data
         daily_report["dropoff_location"].fill_null("Unknown")
     ])
     daily_report = daily_report.with_columns([
-        pl.col("pickup_date").cast(pl.Datetime)
+        pl.col("pickup_date").cast(pl.Date)
     ])
     daily_report = daily_report.select([
         "pickup_date", "pickup_day", "pickup_location", "dropoff_location",
