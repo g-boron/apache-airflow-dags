@@ -1,4 +1,5 @@
 import os
+import shutil
 
 
 def clean_data_directory(file_prefixes: tuple, **kwargs):
@@ -7,5 +8,8 @@ def clean_data_directory(file_prefixes: tuple, **kwargs):
     if file.startswith(file_prefixes)
   ]
   for file in files:
-    os.remove(f"{kwargs['data_path']}{file}")
+    try:
+      os.remove(f"{kwargs['data_path']}{file}")
+    except IsADirectoryError:
+      shutil.rmtree(f"{kwargs['data_path']}{file}")
   print("Files removed")

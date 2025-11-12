@@ -18,17 +18,22 @@ from functions.polars_lazyframe_benchmark.functions.transform import (
   transform_main
 )
 from functions.polars_lazyframe_benchmark.functions.load import insert_into_db
+from functions.operational_functions.dags.dags_parameters import (
+  get_dag_parameters
+)
 
-
+DAG_NAME = os.path.basename(__file__).split(".")[0]
+DAG_PARAMETERS = get_dag_parameters(DAG_NAME)
 KWARGS = {
   "data_path": "/opt/airflow/dags/functions/polars_lazyframe_benchmark/data/"
 }
 
 
 with DAG(
-  dag_id=os.path.basename(__file__),
+  dag_id=DAG_NAME,
   start_date=datetime.now() - timedelta(days=1),
-  schedule=None,
+  schedule=DAG_PARAMETERS["scheduler"],
+  description=DAG_PARAMETERS["description"],
   doc_md=__doc__
 ) as dag:
   Clean_data_directory = PythonOperator(
