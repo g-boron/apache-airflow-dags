@@ -1,11 +1,25 @@
+""" Cleaning DAGs data directories. """
 import os
+import shutil
+import logging
+
+logger = logging.getLogger("airflow.task")
 
 
-def clean_data_directory(file_prefixes: tuple, **kwargs):
+def clean_data_directory(file_prefixes: tuple, **kwargs) -> None:
+  """
+  Cleans data directory.
+
+  :param file_prefixes: Files prefixes to clean.
+  :param kwargs: Config dictionary.
+  """
   files = [
     file for file in os.listdir(kwargs["data_path"])
     if file.startswith(file_prefixes)
   ]
   for file in files:
-    os.remove(f"{kwargs['data_path']}{file}")
-  print("Files removed")
+    try:
+      os.remove(f"{kwargs['data_path']}{file}")
+    except IsADirectoryError:
+      shutil.rmtree(f"{kwargs['data_path']}{file}")
+  logger.info("Files removed")

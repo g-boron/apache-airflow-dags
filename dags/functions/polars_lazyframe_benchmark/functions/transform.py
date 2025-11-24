@@ -4,6 +4,10 @@ from datetime import timedelta
 
 import polars as pl
 
+from functions.operational_functions.metrics.resources import (
+  measure_resources
+)
+
 logger = logging.getLogger("airflow.task")
 
 
@@ -149,6 +153,7 @@ def create_payment_report(lf: pl.LazyFrame) -> pl.DataFrame:
     return payment_report
 
 
+@measure_resources(interval=0.1)
 def transform_main(**kwargs) -> None:
     start_transform = perf_counter()
 

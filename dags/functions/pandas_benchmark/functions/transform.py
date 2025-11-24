@@ -3,6 +3,10 @@ import logging
 
 import pandas as pd
 
+from functions.operational_functions.metrics.resources import (
+  measure_resources
+)
+
 logger = logging.getLogger("airflow.task")
 
 
@@ -127,9 +131,18 @@ def create_payment_report(df: pd.DataFrame) -> pd.DataFrame:
   return payment_report
 
 
+@measure_resources(interval=0.1)
 def transform_main(**kwargs) -> None:
   """ """
   start_transform = perf_counter()
+  # files_to_transform = [
+  #   "yellow_tripdata_2025-06.parquet",
+  #   "yellow_tripdata_2025-07.parquet",
+  #   "yellow_tripdata_2025-08.parquet"
+  # ]
+  # df = pd.DataFrame()
+  # for file in files_to_transform:
+  #   df = pd.concat([df, pd.read_parquet(f"{kwargs['data_path']}{file}")])
   df = pd.read_parquet(f"{kwargs['data_path']}yellow_tripdata_2025-06.parquet")
   location_map = pd.read_csv(
     f"{kwargs['data_path']}taxi_zone_lookup.csv",
