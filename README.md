@@ -1,3 +1,3 @@
-docker compose up airflow-init
+# DAGs performance benchmark
 
-docker compose up -d
+### Version 1.1.0
