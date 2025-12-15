@@ -7,7 +7,7 @@ from functions.operational_functions.db_engines.postgres_engine_builder import (
 )
 
 
-def insert_into_db(file_prefixes: tuple, **kwargs):
+def insert_into_db(file_prefixes: tuple, scenario: str = "first", **kwargs):
   engine = build_psql_engine()
   files = [
     file for file in os.listdir(kwargs["data_path"])
@@ -16,7 +16,7 @@ def insert_into_db(file_prefixes: tuple, **kwargs):
   print(f"Files to load: {len(files)}")
   for file in files:
     df = pl.read_parquet(f"{kwargs['data_path']}{file}")
-    table_name = f"polars_lazyframe_{file.split('.')[0]}"
+    table_name = f"polars_lazyframe_{scenario}_{file.split('.')[0]}"
     print(f"Loading into {table_name}")
     df.write_database(table_name, engine, if_table_exists="replace")
     print("Files loaded")
