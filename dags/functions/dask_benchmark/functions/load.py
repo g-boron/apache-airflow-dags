@@ -8,7 +8,7 @@ from functions.operational_functions.db_engines.postgres_engine_builder import (
 )
 
 
-def insert_into_db(file_prefixes: tuple, **kwargs) -> None:
+def insert_into_db(file_prefixes: tuple, scenario: str = "first", **kwargs) -> None:
   """ """
   engine = build_psql_engine()
   files = [
@@ -18,7 +18,7 @@ def insert_into_db(file_prefixes: tuple, **kwargs) -> None:
   print(f"Files to load: {len(files)}")
   for file in files:
     df = dd.read_parquet(f"{kwargs['data_path']}{file}")
-    table_name = f"dask_{file.split('.')[0]}"
+    table_name = f"dask_{scenario}_{file.split('.')[0]}"
     print(f"Loading into {table_name}")
     if "daily_report" in table_name:
       df.to_sql(

@@ -115,7 +115,7 @@ def create_daily_report(
   daily_report["dropoff_location"] = daily_report["dropoff_location"].fillna(
     "Unknown")
   daily_report["pickup_date"] = dd.to_datetime(
-    df["pickup_date"], format="%Y-%m-%d", errors="coerce")
+    daily_report["pickup_date"], format="%Y-%m-%d", errors="coerce")
   daily_report = daily_report[[
     "pickup_date", "pickup_day", "pickup_location", "dropoff_location",
     "mean_trip_distance", "mean_fare_amount", "mean_tip_amount",
@@ -155,10 +155,18 @@ def create_payment_report(df: dd.DataFrame) -> dd.DataFrame:
 
 
 @measure_resources(interval=0.1)
-def transform_main(**kwargs) -> None:
+def transform_main(scenario: str = "first", **kwargs) -> None:
   """ """
   start_transform = perf_counter()
-  df = dd.read_parquet(f"{kwargs['data_path']}yellow_tripdata_2025-06.parquet")
+  if scenario == "first":
+    logger.info("Performing benchmark in first scenario")
+    df = dd.read_parquet(f"{kwargs['data_path']}yellow_tripdata_2025-06.parquet")
+  elif scenario == "second":
+    logger.info("Performing benchmark in second scenario")
+    df = dd.read_parquet(f"{kwargs['data_path']}yellow_tripdata_2025-*.parquet")
+  else:
+    raise TypeError(f"Scenario: {scenario} is not supported!")
+
   location_map = dd.read_csv(
     f"{kwargs['data_path']}taxi_zone_lookup.csv",
     names=["LocationID", "Zone"]
