@@ -1,3 +1,4 @@
+""" Transforming data """
 from time import perf_counter
 import logging
 
@@ -11,7 +12,13 @@ logger = logging.getLogger("airflow.task")
 
 
 def preprocess(df: pd.DataFrame) -> pd.DataFrame:
-  """ """
+  """
+  Preprocess data - drops empty passenger count and creates date related
+  columns.
+
+  :param df: Input DataFrame.
+  :return: Preprocessed DataFrame.
+  """
   start_preprocess = perf_counter()
   logger.info(f"DF shape before dropna: {df.shape}")
   df = df.dropna(subset=["passenger_count"]).copy()
@@ -28,7 +35,13 @@ def preprocess(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def calculate_speed(df: pd.DataFrame) -> pd.DataFrame:
-  """ """
+  """
+  Calculates taxi speed in mph. Removes anomalies - average speed more than
+  100 mph, trip distance equals to 0 miles or trip duration less than 1 minute.
+
+  :param df: Input DataFrame.
+  :return: Dataframe with calculated taxi speed.
+  """
   start_calculate = perf_counter()
   df["duration"] = df["tpep_dropoff_datetime"] - df["tpep_pickup_datetime"]
   df.loc[df["duration"] <= pd.Timedelta(value=0), "duration"] = None
@@ -45,7 +58,14 @@ def calculate_speed(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def calculate_tip_ratio(df: pd.DataFrame) -> pd.DataFrame:
-  """ """
+  """
+  Calculates tip ratio by dividing tip amount by fare amount. Removes
+  anomalies - tip ratio less than 0, fare amount less than 1 USD and tip ratio
+  more than 100.
+
+  :param df: Input DataFrame.
+  :return: DataFrame with calculated tip ratio.
+  """
   start_calculate = perf_counter()
   df["tip_ratio"] = df["tip_amount"] / df["fare_amount"]
   df.loc[
@@ -61,7 +81,16 @@ def calculate_tip_ratio(df: pd.DataFrame) -> pd.DataFrame:
 def create_daily_report(
   df: pd.DataFrame, location_map: pd.DataFrame
 ) -> pd.DataFrame:
-  """ """
+  """
+  Creates daily report - data grouped by pickup date, pickup day, departure
+  location and arrival location and aggregates mean trip distance, fare amount,
+  tip amount, tip ratio and average speed, sum of tip amount and passenger
+  count and count of trips.
+
+  :param df: Input DataFrame.
+  :param location_map: Locations DataFrame map.
+  :return: Daily report.
+  """
   start_create = perf_counter()
   daily_report = df.groupby([
     "pickup_date", "pickup_day", "PULocationID", "DOLocationID"
@@ -106,7 +135,13 @@ def create_daily_report(
 
 
 def create_payment_report(df: pd.DataFrame) -> pd.DataFrame:
-  """ """
+  """
+  Creates payment report - data grouped by payment type and aggregates
+  sum of fare amount and extras and median of fare amount and extras.
+
+  :param df: Input DataFrame.
+  :return: Payment report.
+  """
   start_create = perf_counter()
   payment_report = df.groupby("payment_type").agg({
     "fare_amount": ["sum", "median"],
@@ -132,8 +167,15 @@ def create_payment_report(df: pd.DataFrame) -> pd.DataFrame:
 
 
 @measure_resources(interval=0.1)
-def transform_main(scenario: str = "first", **kwargs) -> None:
-  """ """
+def transform_main(
+  scenario: str = "first", **kwargs
+) -> None:  # pragma: no cover
+  """
+  Main transformation function.
+
+  :param scenario: Scenario that will be performed.
+  :param kwargs: Config dictionary.
+  """
   start_transform = perf_counter()
   if scenario == "first":
     logger.info("Performing benchmark in first scenario")
