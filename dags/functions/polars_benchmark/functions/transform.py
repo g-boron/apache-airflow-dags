@@ -151,10 +151,26 @@ def create_payment_report(df: pl.DataFrame) -> pl.DataFrame:
 
 
 @measure_resources(interval=0.1)
-def transform_main(**kwargs) -> None:
+def transform_main(scenario: str = "first", **kwargs) -> None:
     start_transform = perf_counter()
+    if scenario == "first":
+        logger.info("Performing benchmark in first scenario")
+        df = pl.read_parquet(
+            f"{kwargs['data_path']}yellow_tripdata_2025-06.parquet")
+    elif scenario == "second":
+        logger.info("Performing benchmark in second scenario")
+        df = pl.DataFrame()
+        files_to_transform = [
+            "yellow_tripdata_2025-06.parquet",
+            "yellow_tripdata_2025-07.parquet",
+            "yellow_tripdata_2025-08.parquet",
+        ]
+        for file in files_to_transform:
+            df = pl.concat(
+                [df, pl.read_parquet(f"{kwargs['data_path']}{file}")])
+    else:
+        raise TypeError(f"Scenario: {scenario} is not supported!")
 
-    df = pl.read_parquet(f"{kwargs['data_path']}yellow_tripdata_2025-06.parquet")
     location_map = pl.read_csv(
         f"{kwargs['data_path']}taxi_zone_lookup.csv",
         columns=["LocationID", "Zone"]

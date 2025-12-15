@@ -132,18 +132,25 @@ def create_payment_report(df: pd.DataFrame) -> pd.DataFrame:
 
 
 @measure_resources(interval=0.1)
-def transform_main(**kwargs) -> None:
+def transform_main(scenario: str = "first", **kwargs) -> None:
   """ """
   start_transform = perf_counter()
-  # files_to_transform = [
-  #   "yellow_tripdata_2025-06.parquet",
-  #   "yellow_tripdata_2025-07.parquet",
-  #   "yellow_tripdata_2025-08.parquet"
-  # ]
-  # df = pd.DataFrame()
-  # for file in files_to_transform:
-  #   df = pd.concat([df, pd.read_parquet(f"{kwargs['data_path']}{file}")])
-  df = pd.read_parquet(f"{kwargs['data_path']}yellow_tripdata_2025-06.parquet")
+  if scenario == "first":
+    logger.info("Performing benchmark in first scenario")
+    df = pd.read_parquet(f"{kwargs['data_path']}yellow_tripdata_2025-06.parquet")
+  elif scenario == "second":
+    logger.info("Performing benchmark in second scenario")
+    df = pd.DataFrame()
+    files_to_transform = [
+      "yellow_tripdata_2025-06.parquet",
+      "yellow_tripdata_2025-07.parquet",
+      "yellow_tripdata_2025-08.parquet",
+    ]
+    for file in files_to_transform:
+      df = pd.concat([df, pd.read_parquet(f"{kwargs['data_path']}{file}")])
+  else:
+    raise TypeError(f"Scenario: {scenario} is not supported!")
+
   location_map = pd.read_csv(
     f"{kwargs['data_path']}taxi_zone_lookup.csv",
     usecols=["LocationID", "Zone"]
