@@ -1,14 +1,14 @@
-# DAGs performance benchmark
+# DAGs Performance Benchmark 📊
 
 ### Version 1.2.0
 
-## Project Overview
+## Project Overview 📘
 
 This project focuses on performing data analysis Python libraries performance tests - measuring
 execution time, CPU and RAM usage. Apache Airflow was used to automate testing. 
 The project was created as a part of my master's thesis.
 
-## Technologies used
+## Technologies Used 🛠️
 
 The project is using the following technologies:
 - Python 3.11
@@ -19,7 +19,7 @@ The project is using the following technologies:
 - PostgreSQL
 - Docker
 
-## Project structure
+## Project Structure 🗂️
 
 ```
 ├── dags/
@@ -34,7 +34,7 @@ The project is using the following technologies:
 │   │   ├── files/
 │   │   │    └── files_cleaner.py
 │   │   └── metrics/
-│   │   │    └── resources.py
+│   │       └── resources.py
 │   ├── pandas_benchmark/
 │   │   ├── data/
 │   │   └── functions/
@@ -66,7 +66,7 @@ with names corresponding to the DAG names. Directory `operational_functions` con
 that support processes such as creating a database engine, cleaning data directories
 and measuring resource usage. Measurements results store into `logs/metrics/<DAG_ID>.csv`.
 
-## Data description
+## Data Description 🗄️
 
 Data used for performing tests is [TLC Trip Record Data](https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page) (Yellow Trips Data) -
 dataset contains taxi rides data in New York. Data was exported into Parquet files. 
@@ -74,20 +74,20 @@ In first scenario DAGs is using data from June 2026 (small dataset).
 In second scenario DAGs is using concatenated data from June, July and August 2025 
 (large dataset).
 
-## DAGs pipelines
+## DAGs Pipelines 🔄
 
 DAGs contains tasks:
 - clean_data_directory - removing output Parquet files
 - Transform_data - transforming raw data (creating daily and payment reports)
 - load - loading data into PSQL tables
 
-## Performance measurement
+## Performance Measurement ⏱️
 
 To measure resources, a function decorator was created. Its purpose is to obtain the function's execution time, 
 CPU usage, and RAM usage. Results are saved into CSV files (separate file for each DAG). The 
 results will be analyzed to assess which Python's library performs best.
 
-## How to run
+## How to Run 🚀
 
 To run project:
 
@@ -114,9 +114,9 @@ To run project:
     
     ```
    {
-   "<DAG_ID>": {
-            "description":  "<DAG description>",
-            "scheduler":    "<CRON scheduler>"
-        }
+      "<DAG_ID>": {
+         "description":  "<DAG description>",
+         "scheduler":    "<CRON scheduler>"
+      }
    }
     ```
