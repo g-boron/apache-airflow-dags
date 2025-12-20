@@ -1,3 +1,12 @@
+"""
+### Polars Benchmark DAG
+
+__Version 1.0.0__
+
+The purpose of the DAG is performance benchmark in data transformation.
+\n
+__Second scenario__ - 3 months of data.
+"""
 import os
 from datetime import datetime, timedelta
 
@@ -20,6 +29,9 @@ DAG_PARAMETERS = get_dag_parameters(DAG_NAME)
 KWARGS = {
   "data_path": "/opt/airflow/dags/functions/polars_benchmark/data/"
 }
+DEFAULT_ARGS = {
+  "owner": "Grzegorz Boroń"
+}
 
 
 with DAG(
@@ -27,6 +39,10 @@ with DAG(
   start_date=datetime.now() - timedelta(days=1),
   schedule=DAG_PARAMETERS["scheduler"],
   description=DAG_PARAMETERS["description"],
+  doc_md=__doc__,
+  catchup=False,
+  default_args=DEFAULT_ARGS,
+  tags=["second_scenario"]
 ) as dag:
   Clean_data_directory = PythonOperator(
     task_id="clean_data_directory",
