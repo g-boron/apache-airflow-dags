@@ -18,6 +18,7 @@ The project is using the following technologies:
 - Dask
 - PostgreSQL
 - Docker
+- PyTest
 
 ## Project Structure 🗂️
 
@@ -44,6 +45,7 @@ The project is using the following technologies:
 │   ├── polars_lazyframe_benchmark/
 │   │   ├── data/
 │   │   └── functions/
+│   ├── tests/
 │   ├── dask_benchmark.py
 │   ├── dask_benchmark_second.py
 │   ├── pandas_benchmark.py
