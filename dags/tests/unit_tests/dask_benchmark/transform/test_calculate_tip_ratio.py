@@ -1,8 +1,9 @@
 """ UNIT TEST """
 import pandas as pd
+import dask.dataframe as dd
 from pytest import approx
 
-from functions.pandas_benchmark.functions.transform import calculate_tip_ratio
+from functions.dask_benchmark.functions.transform import calculate_tip_ratio
 
 
 columns = [
@@ -11,17 +12,23 @@ columns = [
 
 
 def test_empty_frame() -> None:
-  sample_data = pd.DataFrame([], columns=columns)
-  result_data = calculate_tip_ratio(sample_data)
+  df = pd.DataFrame({
+    "id": pd.Series(dtype="int64"),
+    "tip_amount": pd.Series(dtype="float64"),
+    "fare_amount": pd.Series(dtype="float64"),
+  })
+  sample_data = dd.from_pandas(df, npartitions=1)
+  result_data = calculate_tip_ratio(sample_data).compute()
 
   assert result_data.empty
 
 
 def test_calculate_tip_ratio() -> None:
-  sample_data = pd.DataFrame([
+  df = pd.DataFrame([
     [1, 5, 25],
   ], columns=columns)
-  result_data = calculate_tip_ratio(sample_data)
+  sample_data = dd.from_pandas(df, npartitions=1)
+  result_data = calculate_tip_ratio(sample_data).compute()
 
   assert result_data.shape == (1, 4)
   assert result_data.loc[
@@ -30,12 +37,13 @@ def test_calculate_tip_ratio() -> None:
 
 
 def test_anomalies() -> None:
-  sample_data = pd.DataFrame([
+  df = pd.DataFrame([
     [1, 2, 0.4],
     [2, -5, 10],
     [3, 5, 25],
   ], columns=columns)
-  result_data = calculate_tip_ratio(sample_data)
+  sample_data = dd.from_pandas(df, npartitions=1)
+  result_data = calculate_tip_ratio(sample_data).compute()
 
   assert result_data.shape == (3, 4)
   assert result_data.loc[
