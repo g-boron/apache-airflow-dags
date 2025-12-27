@@ -49,8 +49,7 @@ def calculate_speed(df: dd.DataFrame) -> dd.DataFrame:
     duration=df["duration"].mask(df["duration"] <= timedelta(seconds=0))
   )
   df = df.assign(
-    duration_hours=df["duration"].map(lambda x: x.total_seconds(),
-                                      meta=("duration", "float64")) / 3600
+    duration_hours=df["duration"].dt.total_seconds() / 3600
   )
   df = df.assign(
     avg_speed=df["trip_distance"] / df["duration_hours"]

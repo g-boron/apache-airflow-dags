@@ -1,6 +1,6 @@
 # DAGs Performance Benchmark 📊
 
-### Version 1.3.0
+### Version 1.4.0
 
 ## Project Overview 📘
 
@@ -18,6 +18,7 @@ The project is using the following technologies:
 - Dask
 - PostgreSQL
 - Docker
+- PyTest
 
 ## Project Structure 🗂️
 
@@ -44,6 +45,7 @@ The project is using the following technologies:
 │   ├── polars_lazyframe_benchmark/
 │   │   ├── data/
 │   │   └── functions/
+│   ├── tests/
 │   ├── dask_benchmark.py
 │   ├── dask_benchmark_second.py
 │   ├── pandas_benchmark.py
@@ -64,7 +66,8 @@ The project is using the following technologies:
 Functions that load data into the database and transform data are located in directories 
 with names corresponding to the DAG names. Directory `operational_functions` contains functions
 that support processes such as creating a database engine, cleaning data directories
-and measuring resource usage. Measurements results store into `logs/metrics/<DAG_ID>.csv`.
+and measuring resource usage. Measurements results store into `logs/metrics/<DAG_ID>.csv`. 
+To run unit tests type `pytest .\dags\tests\unit_tests\`.
 
 ## Data Description 🗄️
 
