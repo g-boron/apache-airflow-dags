@@ -40,13 +40,13 @@ def test_create_daily_report() -> None:
     [
       "2025-12-20", "Tuesday", 3, 99, 3, 2, 1, 0.5, 1, "V4", 15
     ]
-  ], schema=columns)
+  ], schema=columns, orient="row")
   sample_locations = pl.DataFrame([
     [1, "Manhattan"],
     [2, "SoHo"],
     [3, "Greenwich Village"],
     [4, "Brooklyn"]
-  ], schema=location_map_columns)
+  ], schema=location_map_columns, orient="row")
   result_data = create_daily_report(sample_data, sample_locations)
 
   assert result_data.shape == (3, 12)

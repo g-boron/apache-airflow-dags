@@ -33,7 +33,7 @@ def test_preprocess() -> None:
       2, None, datetime(2025, 12, 10, 10, 0, 0),
       datetime(2025, 12, 10, 14, 15, 0)
     ],
-  ], schema=columns)
+  ], schema=columns, orient="row")
   result_data = preprocess(sample_data)
 
   assert result_data.shape == (1, 10)

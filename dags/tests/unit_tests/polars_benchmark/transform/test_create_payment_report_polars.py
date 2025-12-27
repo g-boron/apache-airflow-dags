@@ -23,7 +23,7 @@ def test_create_payment_report() -> None:
     [2, 10, 4],
     [2, 12, 2],
     [1, 15, 11]
-  ], schema=columns)
+  ], schema=columns, orient="row")
   result_data = create_payment_report(sample_data)
 
   assert result_data.shape == (2, 5)

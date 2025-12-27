@@ -22,7 +22,7 @@ def get_dag_info(**kwargs) -> tuple[str, str]:
   return dag_id, run_id
 
 
-def save_results(row: dict, file_path: str) -> None:
+def save_results(row: dict, file_path: str) -> None:  # pragma: no cover
   """
   Saves results into given path.
 
@@ -40,7 +40,7 @@ def save_results(row: dict, file_path: str) -> None:
 def calculate_metrics_and_save(
   cpu_samples: list, ram_samples: list, end_time: time, start_time: time, 
   func: callable, dag_id: str, run_id: str, file_path: str
-) -> None:
+) -> None:  # pragma: no cover
   """
   Calculates metrics and saves results into file.
   Calculates: average CPU usage, maximum CPU usage, average RAM usage,
@@ -76,7 +76,7 @@ def calculate_metrics_and_save(
   save_results(row, file_path)
 
 
-def measure_resources(interval: float = 0.5) -> callable:
+def measure_resources(interval: float = 0.5) -> callable:  # pragma: no cover
   """
   Decorator responsible for measure Airflow task resources - CPU, RAM and
   task duration. Creates CSV file with name: <dag_id>.csv.

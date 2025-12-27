@@ -2,7 +2,9 @@
 import polars as pl
 from pytest import approx
 
-from functions.polars_benchmark.functions.transform import calculate_tip_ratio
+from functions.polars_lazyframe_benchmark.functions.transform import (
+  calculate_tip_ratio
+)
 
 
 columns = [
@@ -11,21 +13,21 @@ columns = [
 
 
 def test_empty_frame() -> None:
-  sample_data = pl.DataFrame([], schema={
+  sample_data = pl.LazyFrame([], schema={
     "id": pl.Int32,
     "tip_amount": pl.Float32,
     "fare_amount": pl.Float32,
   })
-  result_data = calculate_tip_ratio(sample_data)
+  result_data = calculate_tip_ratio(sample_data).collect()
 
   assert result_data.is_empty()
 
 
 def test_calculate_tip_ratio() -> None:
-  sample_data = pl.DataFrame([
+  sample_data = pl.LazyFrame([
     [1, 5, 25],
-  ], schema=columns)
-  result_data = calculate_tip_ratio(sample_data)
+  ], schema=columns, orient="row")
+  result_data = calculate_tip_ratio(sample_data).collect()
 
   assert result_data.shape == (1, 4)
   assert result_data.filter(
@@ -34,12 +36,12 @@ def test_calculate_tip_ratio() -> None:
 
 
 def test_anomalies() -> None:
-  sample_data = pl.DataFrame({
+  sample_data = pl.LazyFrame({
     "id": [1, 2, 3],
     "tip_amount": [2.0, -5.0, 5.0],
     "fare_amount": [0.4, 10.0, 25.0]
   })
-  result_data = calculate_tip_ratio(sample_data)
+  result_data = calculate_tip_ratio(sample_data).collect()
 
   assert result_data.shape == (3, 4)
   assert result_data.filter(

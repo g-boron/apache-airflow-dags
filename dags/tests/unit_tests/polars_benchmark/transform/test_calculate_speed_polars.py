@@ -30,7 +30,7 @@ def test_calculate_speed() -> None:
       1, datetime(2025, 12, 3, 14, 0, 0),
       datetime(2025, 12, 3, 14, 35, 0), 15
     ],
-  ], schema=columns)
+  ], schema=columns, orient="row")
   result_data = calculate_speed(sample_data)
 
   assert result_data.shape == (1, 7)
@@ -54,7 +54,7 @@ def test_anomalies() -> None:
       3, datetime(2025, 12, 20, 20, 0, 0),
       datetime(2025, 12, 20, 20, 0, 1), 15
     ],
-  ], schema=columns)
+  ], schema=columns, orient="row")
   result_data = calculate_speed(sample_data)
 
   assert result_data.shape == (3, 7)
