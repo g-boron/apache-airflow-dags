@@ -29,7 +29,8 @@ The project is using the following technologies:
 │   │   └── functions/
 │   ├── operational_functions/
 │   │   ├── dags/
-│   │   │    └── dags_parameters.py
+│   │   │    ├── dags_parameters.py
+│   │   │    └── self_triggering.py
 │   │   ├── db_engines/
 │   │   │    └── postres_engine_builder.py
 │   │   ├── files/
@@ -118,8 +119,9 @@ To run project:
     ```
    {
       "<DAG_ID>": {
-         "description":  "<DAG description>",
-         "scheduler":    "<CRON scheduler>"
+         "description":       "<DAG description>",
+         "scheduler":         "<CRON scheduler>",
+         "trigger_max_runs":  "<Max DAG runs to trigger>"
       }
    }
     ```

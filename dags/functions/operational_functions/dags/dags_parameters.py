@@ -4,7 +4,8 @@ from airflow.models import Variable
 
 def get_dag_parameters(dag_name: str) -> dict:
   """
-  Parses Airflow variable to get DAGs scheduler settings and description.
+  Parses Airflow variable to get DAGs scheduler settings, description and
+  self-trigger max runs value.
 
   :param dag_name: DAG name set in Airflow variable.
   :return: Dictionary of DAG settings.
@@ -13,5 +14,6 @@ def get_dag_parameters(dag_name: str) -> dict:
   dag_parameters = dags_parameters.get(dag_name)
   return {
     "scheduler": dag_parameters.get("scheduler"),
-    "description": dag_parameters.get("description")
+    "description": dag_parameters.get("description"),
+    "trigger_max_runs": dag_parameters.get("trigger_max_runs", 1)
   }
