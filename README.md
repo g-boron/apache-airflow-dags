@@ -1,6 +1,6 @@
 # DAGs Performance Benchmark 📊
 
-### Version 1.4.0
+### Version 1.5.0
 
 ## Project Overview 📘
 
